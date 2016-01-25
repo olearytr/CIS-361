@@ -23,7 +23,8 @@ int main ()
 
 	// write code below to store the key in array alp 
 	// after removing duplicate letters
-	
+
+	//Reset size for later purposes	
 	size = 0;
 
 	for (i =0; i < 20; i++){
@@ -33,13 +34,17 @@ int main ()
 		ch = (tolower(ch));
 
 		for (j = 0; j < 26; j++) {
-			
+	
+			//If the char is not alphabetical, stop
+			if ( isalpha(ch) == 0) { break; }
+		
 			//If the char is already in alp, stop 
 			if ( ch == alp[j] ) { break; }
 
 			//If the current spot is not empty, skip it
 			if ( alp[j] != '\0' ) { /* Do nothing */ }
 
+			//Otherwise, set the current spot to ch, increase the size, and go on to the next char
 			else {
 				alp[j] = ch;
 				size++;
@@ -53,10 +58,13 @@ int main ()
 	
 	for (i = 0; i < 26; i++ ){
 
+		//set the current char
 		ch = rev[i];
 
+		//check if the char has been found in alp
 		j = found(alp, 26, ch);
 
+		//if it was not found, add it to the next open spot of alp, increase the size, and move on to the next
 		if ( j == 0) {
 			alp[size] = ch;
 			size++;

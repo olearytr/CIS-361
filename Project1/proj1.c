@@ -29,6 +29,7 @@ return 0;
 void readFreq(float given[], char fname[]){
 	FILE *file;
 
+	char ch;
 	int i = 0;
 	float num = 0.0;
 
@@ -39,11 +40,22 @@ void readFreq(float given[], char fname[]){
 		exit (0);
 	}
 
+	//Test to see what the file contains
+	/*	
+	printf("The contents of %s file are :\n", fname);
+ 
+ 	while( ( ch = fgetc(file) ) != EOF )
+      		printf("%c",ch);
+	*/
+	
 	for (i = 0; i < 26; i++)
     	{
-        	fscanf(file, "%d", &given[i] );
-		printf("Number is: %d\n", given[i]);
+        	fscanf(file, " %c%f", &ch, &given[i]);
     	}	
+
+	for ( i = 0; i < 26; i++){
+		printf("Number is: %f\n", given[i]);
+	}
 
 	fclose(file);
 }

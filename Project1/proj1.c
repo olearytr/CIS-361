@@ -12,8 +12,10 @@ int main (int argc, char * argv[]) {
 
 	int i = 0;
 	float freq [26];
+	float found [26];
 	readFreq(freq, "/home/olearyt/Documents/CIS/361/proj1/LetFreq.txt");
 
+	calcFreq(found, "/home/olearyt/Documents/CIS/361/proj1/test.txt");
 
 	/* //Tests Rotate
 	char input = 'z';
@@ -31,7 +33,6 @@ void readFreq(float given[], char fname[]){
 
 	char ch;
 	int i = 0;
-	float num = 0.0;
 
 	file = fopen(fname, "r");
 
@@ -53,15 +54,83 @@ void readFreq(float given[], char fname[]){
         	fscanf(file, " %c%f", &ch, &given[i]);
     	}	
 
+	/*
 	for ( i = 0; i < 26; i++){
 		printf("Number is: %f\n", given[i]);
-	}
+	}*/
 
 	fclose(file);
 }
 
-// Read the encoded text from an input file and accumulate the letter frequency            // data for the encoded text. Store the frequency data in array found.
+// Read the encoded text from an input file and accumulate the letter frequency
+// data for the encoded text. Store the frequency data in array found.
 void calcFreq(float found[], char fname[]){
+	FILE *file;
+
+	char array[256];
+	int i =0;
+	float total = 0.0;
+	float inputFreq[26];
+
+	for ( i = 0; i < 26; i++){
+		inputFreq[i] = 0;
+	}
+
+	file = fopen(fname, "r");
+
+	if ( file == NULL ) {
+		printf("Error reading file\n");
+		exit(0);
+	}
+
+	i = 0;
+	
+	while( fscanf(file, "%c", &array[i]) != EOF){
+		i++;
+	}
+
+	//Test the input message
+	/*	
+	i = 0;
+	
+	while ( array[i] != '\0') {
+		printf("%c\n", array[i]);
+		i++;
+	}*/
+
+	i = 0;
+
+	while ( array[i] != '\0'){
+		if(tolower(array[i]) >= 'a' && tolower(array[i]) <= 'z'){
+			inputFreq[tolower(array[i]) - 'a']++;
+		}
+		i++;
+	}
+
+	//Test the counters
+	/*
+	i=0;
+
+	while ( i != 26 ) {
+		printf("%c occurs %f times\n", i+'a', inputFreq[i]);
+		i++;
+	}*/
+
+	for ( i = 0; i < 26; i++){
+		total = total + inputFreq[i];
+	}
+
+	for ( i = 0; i < 26; i++){
+		found[i] = inputFreq[i]/total;
+	}
+	
+	//Test the frequency
+	/*
+	for ( i = 0; i < 26; i++) {
+		printf("Frequency at %c is: %f\n", i+'a', found[i]);
+	}*/
+
+	fclose(file);
 
 }
 

@@ -47,6 +47,6 @@ boolean full(const queue *q){
 	return ((boolean)(q -> count == FULL));
 }
 
-int main(){
-	return 0;
-}
+//int main(){
+//	return 0;
+//}

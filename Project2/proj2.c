@@ -1,6 +1,7 @@
 #include "queue.h"
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 #define AVG_SERVICE 2.0
 
@@ -10,34 +11,11 @@ void readIn(int[], int[], char[]);
 int custPerMin(int, int[], int[]);
 
 int main(){
-	int i = 0, lastNum = 0 , numOfTellers = 4, customersAdded = 0;
-	int customersPerMin[5], customersPercent[5], range[6];	
-	time_t t;
-
-	//Intializes random number generator
-	srand((unsigned) time(&t));
-
-	readIn(customersPerMin, customersPercent, "/home/olearyt/Documents/CIS/361/proj2/proj2.dat");
+	int numOfTellers = 4;	
 	
-	//Initialize range to the lowest percent of each section
-	range[6] = 100;
-	for (i = 4; i > -1; i--){
-		if(i == 4){
-			range[i] = 100 - customersPercent[i];
-			lastNum = range[i];	
-		}
-		else{
-			range[i] = lastNum - customersPercent[i];
-			lastNum = range[i];
-		}
-		//printf("Range at %d: %d\n", i, range[i]);
-	}	
-
-	customersAdded = custPerMin(rand() % 100, customersPerMin, range);
-	
-	/*
 	simulation(numOfTellers);
 	numOfTellers++;
+	/*
 	simulation(numOfTellers);
         numOfTellers++;
 	simulation(numOfTellers);
@@ -49,9 +27,55 @@ int main(){
 }
 
 void simulation(int numOfTellers){
-	
-}
+	int i = 0, m = 0, lastNum = 0, customersAdded = 0, percent = 0;
+        int customersPerMin[5], customersPercent[5], range[6];
+        time_t t;
+	struct queue waitLine;
+	sequenceNum sequenceID = 1;
 
+	//Initialize the queue
+	initialize(&waitLine);
+
+	//Intializes random number generator
+	srand((unsigned) time(&t));
+
+	//read in the dat file
+        readIn(customersPerMin, customersPercent, "/home/olearyt/Documents/CIS/361/proj2/proj2.dat");
+
+	//Initialize range to the lowest percent of each section
+	range[6] = 100;
+        for (i = 4; i > -1; i--){
+                if(i == 4){
+                        range[i] = 100 - customersPercent[i];
+                        lastNum = range[i];
+                }
+                else{
+                        range[i] = lastNum - customersPercent[i];
+                        lastNum = range[i];
+                }
+		//printf("Range at %d: %d\n", i, range[i]);
+	}
+	
+	for( i = 0; i < 480; i++){
+
+		//get a random percent and add the corresponding amount of customers
+		percent = rand() % 100;
+		//printf("Percent: %d\n", percent);
+        	customersAdded = custPerMin(percent, customersPerMin, range);
+		//printf("Corresponding Customers: %d\n", customersAdded);
+	
+		//add that amount of customers to the queue
+		for ( m = 0; m < customersAdded; m++){
+			enqueue(sequenceID, &waitLine);
+			sequenceID++;
+		}
+
+		//any available tellers should service customer next in line
+
+
+	}
+
+}
 double expdist(double mean){
 	double r = rand();
 	r /= RAND_MAX;
@@ -102,8 +126,10 @@ int custPerMin(int percent, int customersMin[], int range[]){
 	int i = 0;
 
 	for(i = 0; i < 5; i++){
-		if( i <= range[i+1]){
+		if( percent <= range[i+1]){
 			return customersMin[i];
 		}
 	}
+
+	return -1;
 }

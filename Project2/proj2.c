@@ -28,7 +28,7 @@ int main(){
 
 void simulation(int numOfTellers){
 	int i = 0, m = 0, lastNum = 0, customersAdded = 0, percent = 0;
-        int customersPerMin[5], customersPercent[5], range[6];
+        int customersPerMin[5], customersPercent[5], range[6], tellers[numOfTellers];
         time_t t;
 	struct queue waitLine;
 	sequenceNum sequenceID = 1;
@@ -55,14 +55,28 @@ void simulation(int numOfTellers){
                 }
 		//printf("Range at %d: %d\n", i, range[i]);
 	}
+
+	//Initialize the tellers array, 0 for free, positive for time remaining with customer
+	for (i = 0; i < numOfTellers; i++){
+		tellers[i] = 0;
+	}
 	
+	//loop through 480 minutes for a work day
 	for( i = 0; i < 480; i++){
+
+		//subtract 1 min from each tellers counter
+		for(m = 0; m < numOfTellers; m++){
+			//only subtract if the counter is greater than 0
+			if(tellers[m] > 0){
+				tellers[m]--;
+			}
+		}
 
 		//get a random percent and add the corresponding amount of customers
 		percent = rand() % 100;
-		//printf("Percent: %d\n", percent);
+		printf("Percent: %d\n", percent);
         	customersAdded = custPerMin(percent, customersPerMin, range);
-		//printf("Corresponding Customers: %d\n", customersAdded);
+		printf("Corresponding Customers: %d\n", customersAdded);
 	
 		//add that amount of customers to the queue
 		for ( m = 0; m < customersAdded; m++){
@@ -71,11 +85,19 @@ void simulation(int numOfTellers){
 		}
 
 		//any available tellers should service customer next in line
-
+		for ( m = 0; m < numOfTellers; m++){
+			if(tellers[m] == 0 && !empty(&waitLine)){
+				//dequeue the line, set the tellers count to the random
+				//time to service from expdist()
+				dequeue(&waitLine);
+				tellers[m] = (int)expdist(AVG_SERVICE);
+			}
+		}
 
 	}
 
 }
+
 double expdist(double mean){
 	double r = rand();
 	r /= RAND_MAX;

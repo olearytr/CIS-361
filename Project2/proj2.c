@@ -7,6 +7,9 @@
 #define AVG_SERVICE 2.0
 #define MAX_LINE 1920 /*max amount of customers * 480*/
 
+//T. Ryan O'Leary
+//CIS 361 Project 2
+
 void simulation(int);
 double expdist(double);
 void readIn(int[], int[], char[]);
@@ -95,8 +98,11 @@ void simulation(int numOfTellers){
 	for (i = 0; i < MAX_LINE; i++){
 		start[i] = 0;
 		end[i] = 0;
-		length[i] = 0;
 	}
+
+	for ( i = 0; i < 480; i++){
+		length[i] = 0;
+	}	
 	
 	//loop through 480 minutes for a work day
 	for( i = 0; i < 480; i++){
@@ -146,8 +152,8 @@ void simulation(int numOfTellers){
 	printf("Total not served due to the end of the work day: %d\n", notServed(start, end, MAX_LINE));
 	printf("Average time spent waiting: %d\n", avgWait(start, end, MAX_LINE));
 	printf("Max time spent waiting: %d\n", maxWait(start, end, MAX_LINE));
-	printf("Average length of line: %d\n", avgLength(length, MAX_LINE));
-	printf("Max length of line: %d\n", maxLength(length, MAX_LINE));
+	printf("Average length of line: %d\n", avgLength(length, 480));
+	printf("Max length of line: %d\n", maxLength(length, 480));
 
 }
 

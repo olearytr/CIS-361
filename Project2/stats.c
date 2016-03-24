@@ -19,7 +19,7 @@ int avgWait(int start[], int end[], int size){
 
 	//Run through every spot of the arrays
 	for( i = 0; i < size; i++){
-	
+
 		// if they are both 0, then no customer ever filled that spot,
 		// so skip it (set to -1)
 		if(end[i] == 0 && start[i] == 0){
@@ -37,7 +37,7 @@ int avgWait(int start[], int end[], int size){
 		else {
 		   avgs[i] = end[i] - start[i];
 		   actual++;
-		}	
+		}
 	}
 
 	//add all the values of the array, if the spot is -1, skip it
@@ -55,7 +55,7 @@ int avgWait(int start[], int end[], int size){
 }
 
  /*
- * Returns the max waiting time 
+ * Returns the max waiting time
  * @param start - the start time for each potential customer
  * @param end - the end time for each potential cutomer
  * @param size - the size of the arrays
@@ -113,7 +113,7 @@ int maxLength(int lengths[], int size){
 			max = lengths[i];
 		}
 	}
-	
+
 	//return the max
 	return max;
 }
@@ -127,14 +127,14 @@ int maxLength(int lengths[], int size){
 int notServed(int start[], int end[], int size){
 	int i = 0, counter = 0;
 
-	//Increase the counter if the start time is not 0 
+	//Increase the counter if the start time is not 0
 	//but the end time is 0
 	for ( i = 0; i < size; i++){
 		if(start[i] > 0 && end[i] == 0){
 			counter++;
 		}
 	}
-	
+
 	//return the counter
 	return counter;
 }
